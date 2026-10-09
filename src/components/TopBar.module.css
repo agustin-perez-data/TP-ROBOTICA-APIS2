@@ -1,0 +1,32 @@
+.barra {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 10px 18px;
+  background: var(--c-barra);
+  color: var(--c-barra-texto);
+}
+
+.robot {
+  font-size: calc(18px * var(--escala));
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.robot small {
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--c-barra-tenue);
+}
+
+.espacio {
+  flex: 1;
+}
+
+.acciones {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
