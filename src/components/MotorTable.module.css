@@ -1,0 +1,57 @@
+.alerta {
+  background: var(--c-critica-fondo);
+  color: var(--c-critica);
+  border: 1px solid #f5b5b1;
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-weight: 600;
+  font-size: calc(14px * var(--escala));
+  margin-bottom: 8px;
+}
+
+.contenedor {
+  max-height: 640px;
+  overflow-y: auto;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: calc(14px * var(--escala));
+}
+
+.tabla th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--c-panel);
+  text-align: right;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--c-tinta-2);
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--c-borde);
+  white-space: nowrap;
+}
+
+.tabla td {
+  text-align: right;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--c-borde-suave);
+  white-space: nowrap;
+}
+
+.tabla th:first-child,
+.tabla td:first-child {
+  text-align: left;
+}
+
+.tabla tr[data-fin-grupo='true'] td {
+  border-bottom-color: var(--c-divisor);
+}
+
+.vacio {
+  color: var(--c-apagado);
+  padding: 24px 0;
+  text-align: center;
+}

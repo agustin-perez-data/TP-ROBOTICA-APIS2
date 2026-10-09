@@ -1,0 +1,32 @@
+.badge {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  min-width: calc(74px * var(--escala));
+  padding: 1px 9px;
+  border-radius: 99px;
+  font-size: calc(13px * var(--escala));
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge[data-estado='normal'] {
+  background: var(--c-normal-fondo);
+  color: var(--c-normal);
+}
+
+.badge[data-estado='elevada'] {
+  background: var(--c-elevada-fondo);
+  color: var(--c-elevada);
+}
+
+.badge[data-estado='critica'] {
+  background: var(--c-critica-fondo);
+  color: var(--c-critica);
+}
+
+.badge[data-estado='desconocida'] {
+  background: var(--c-borde-suave);
+  color: var(--c-apagado);
+}
