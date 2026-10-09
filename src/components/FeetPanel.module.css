@@ -1,0 +1,18 @@
+.vista {
+  display: block;
+  margin: 4px auto 0;
+  width: calc(150px * var(--escala));
+  max-width: 100%;
+}
+
+.pie {
+  font-size: 13px;
+  color: var(--c-tinta-2);
+  text-align: center;
+  margin-top: 6px;
+}
+
+.vacio {
+  color: var(--c-apagado);
+  font-size: 13px;
+}

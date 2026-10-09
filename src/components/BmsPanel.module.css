@@ -1,0 +1,80 @@
+.carga {
+  font-size: calc(34px * var(--escala));
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.carga small {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--c-tinta-2);
+}
+
+.barra {
+  height: 8px;
+  background: var(--c-borde-suave);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 4px 0 8px;
+}
+
+.relleno {
+  height: 100%;
+  background: var(--c-senal);
+  border-radius: 4px;
+}
+
+.dato {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 2px 0;
+}
+
+.dato span:first-child {
+  color: var(--c-tinta-2);
+}
+
+.celdas {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 46px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.celda {
+  flex: 1;
+  min-width: 0;
+  background: #c9d6e8;
+  border-radius: 3px 3px 0 0;
+}
+
+.etiquetas {
+  display: flex;
+  gap: 4px;
+  font-size: 10.5px;
+  color: var(--c-tinta-2);
+}
+
+.etiquetas span {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  overflow: hidden;
+}
+
+.nota {
+  font-size: 13px;
+  color: var(--c-tinta-2);
+  margin: 6px 0 0;
+}
+
+.pie {
+  font-size: 13px;
+  color: var(--c-tinta-2);
+  text-align: center;
+  margin-top: 6px;
+}
