@@ -1,0 +1,52 @@
+:root {
+  --c-fondo: #e9ecef;
+  --c-tinta: #1e252c;
+  --c-tinta-2: #52606d;
+  --c-apagado: #7b8794;
+  --c-panel: #ffffff;
+  --c-borde: #cbd2d9;
+  --c-borde-suave: #e4e7eb;
+  --c-divisor: #9aa5b1;
+  --c-barra: #1e252c;
+  --c-barra-2: #2e3a46;
+  --c-barra-texto: #e9ecef;
+  --c-barra-tenue: #9fb3c8;
+  --c-senal: #1f5fbf;
+  --c-serie-2: #b4540a;
+  --c-normal-fondo: #e3f4e8;
+  --c-normal: #1b6b3a;
+  --c-elevada-fondo: #fff3c4;
+  --c-elevada: #7a5b00;
+  --c-critica-fondo: #fde2e1;
+  --c-critica: #9b1c1c;
+  --c-vivo: #4cc38a;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --escala: 1;
+}
+
+[data-presentacion='true'] {
+  --escala: 1.45;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--c-fondo);
+  color: var(--c-tinta);
+  font-family: 'Barlow', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.presionable {
+  transition: transform 160ms ease-out;
+}
+
+.presionable:active:not(:disabled):not([data-disabled]) {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .presionable:active:not(:disabled):not([data-disabled]) {
+    transform: none;
+  }
+}
