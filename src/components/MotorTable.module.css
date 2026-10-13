@@ -1,3 +1,10 @@
+/* Reserves exactly one alert line: border 2px + padding 12px + 1.4 line height. */
+.huecoAlerta {
+  flex: none;
+  min-height: calc(14px * var(--escala) * 1.4 + 14px);
+  margin-bottom: 8px;
+}
+
 .alerta {
   background: var(--c-critica-fondo);
   color: var(--c-critica);
@@ -6,12 +13,23 @@
   padding: 6px 10px;
   font-weight: 600;
   font-size: calc(14px * var(--escala));
-  margin-bottom: 8px;
+  line-height: 1.4;
 }
 
+/* Capped by the viewport so, zoomed in, the inner scroll never outgrows the window (no nested
+   scrolls hiding the sticky header). Grows to fill the motors panel when it is stretched. */
 .contenedor {
-  max-height: 640px;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: min(640px, 70vh);
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-divisor) transparent;
+}
+
+/* Rows hidden below: fade the last visible one so the cut reads as "more to scroll". */
+.contenedor[data-hay-mas='true'] {
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 32px), transparent);
 }
 
 .tabla {

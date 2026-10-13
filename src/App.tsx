@@ -31,7 +31,7 @@ export function App() {
       <TopBar presentacion={presentacion} onAlternarPresentacion={() => setPresentacion((v) => !v)} />
       <ErrorConexion />
       <main className={classes.grilla} data-viejo={viejo}>
-        <Panel titulo="Motores">
+        <Panel titulo="Motores" className={classes.motores}>
           <MotorTable
             motores={telemetria?.motores ?? []}
             tamanoGrupo={info?.tipo === 'cuadrupedo' ? 3 : 0}

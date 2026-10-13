@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { adaptarInfo, adaptarTelemetria } from '../telemetry/adapter';
 import { infoG1, infoGo2, telemetriaG1, telemetriaGo2 } from '../telemetry/__fixtures__/robots';
@@ -43,6 +43,22 @@ describe('MotorTable', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
+  it('reserva el lugar de la alerta para que la tabla no salte', () => {
+    const calientes = go2.map((m, i) => (i === 1 ? { ...m, temperatura: 60 } : m));
+    // Plain render (no providers needed) so rerender updates the same tree instead of remounting.
+    const { rerender } = render(<MotorTable motores={calientes} tamanoGrupo={3} mostrarVelocidad />);
+    const hueco = screen.getByTestId('hueco-alerta');
+    expect(hueco).toContainElement(screen.getByRole('alert'));
+    expect(hueco.nextElementSibling).toContainElement(screen.getByRole('table'));
+
+    const tibios = go2.map((m, i) => (i === 1 ? { ...m, temperatura: 59.9 } : m));
+    rerender(<MotorTable motores={tibios} tamanoGrupo={3} mostrarVelocidad />);
+    // Same slot, still in place before the table, now empty: nothing is announced.
+    expect(screen.getByTestId('hueco-alerta')).toBe(hueco);
+    expect(hueco).toBeEmptyDOMElement();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
   it('puede ocultar la velocidad (modo presentación)', () => {
     renderUi(<MotorTable motores={go2} tamanoGrupo={3} mostrarVelocidad={false} />);
     expect(screen.queryByRole('columnheader', { name: 'Velocidad (rad/s)' })).not.toBeInTheDocument();
@@ -52,6 +68,19 @@ describe('MotorTable', () => {
     const g1 = adaptarTelemetria(telemetriaG1(), adaptarInfo(infoG1), 0).motores;
     renderUi(<MotorTable motores={g1} tamanoGrupo={0} mostrarVelocidad />);
     expect(screen.getAllByRole('row')).toHaveLength(1 + 29);
+  });
+
+  it('marca cuando quedan filas ocultas abajo del scroll', () => {
+    const g1 = adaptarTelemetria(telemetriaG1(), adaptarInfo(infoG1), 0).motores;
+    renderUi(<MotorTable motores={g1} tamanoGrupo={0} mostrarVelocidad />);
+    const contenedor = screen.getByRole('table').parentElement!;
+    Object.defineProperty(contenedor, 'scrollHeight', { configurable: true, value: 900 });
+    Object.defineProperty(contenedor, 'clientHeight', { configurable: true, value: 400 });
+    fireEvent.scroll(contenedor);
+    expect(contenedor).toHaveAttribute('data-hay-mas', 'true');
+    contenedor.scrollTop = 500;
+    fireEvent.scroll(contenedor);
+    expect(contenedor).toHaveAttribute('data-hay-mas', 'false');
   });
 
   it('sin motores explica que espera datos', () => {

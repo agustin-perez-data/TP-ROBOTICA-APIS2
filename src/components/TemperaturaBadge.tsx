@@ -18,10 +18,11 @@ const NOMBRE: Record<EstadoTemperatura, string> = {
 
 export function TemperaturaBadge({ temperatura }: { temperatura: Num }) {
   const estado = estadoTemperatura(temperatura);
-  // Whole degrees like electroSim, but keep the decimal when present: rounding 59.9 to "60"
-  // would show a critical-looking number in a warning color.
-  const decimales = temperatura !== null && !Number.isInteger(temperatura) ? 1 : 0;
-  const valor = `${formatearNumero(temperatura, decimales)} °C`;
+  // Always one decimal so the column aligns ("40,0", "59,9"). Truncated instead of rounded: the
+  // thresholds are whole degrees, so 59.95 shows "59,9" and never a critical-looking "60,0" in a
+  // warning color. The epsilon absorbs binary error (e.g. 0.7 * 10).
+  const mostrada = temperatura === null ? null : Math.floor(temperatura * 10 + 1e-9) / 10;
+  const valor = `${formatearNumero(mostrada, 1)} °C`;
   const etiqueta =
     estado === 'desconocida' ? 'Temperatura sin dato' : `Temperatura ${NOMBRE[estado]}: ${valor}`;
   return (
