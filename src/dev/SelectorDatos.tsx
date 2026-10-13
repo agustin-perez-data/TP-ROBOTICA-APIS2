@@ -7,9 +7,13 @@ const OPCIONES = [
   { value: 'g1', label: 'G1' },
 ];
 
-/** Development-only switch between the real backend and fake scenarios. Never shipped. */
+/**
+ * Development-only switch between the real backend and fake scenarios. Never shipped.
+ * Collapsed to a small, translucent corner tag so it does not cover the data.
+ */
 export function SelectorDatos() {
   const actual = new URLSearchParams(window.location.search).get('datos') ?? 'real';
+  const nombre = OPCIONES.find((o) => o.value === actual)?.label ?? actual;
   const cambiar = (valor: string) => {
     const url = new URL(window.location.href);
     if (valor === 'real') url.searchParams.delete('datos');
@@ -17,8 +21,9 @@ export function SelectorDatos() {
     window.location.assign(url);
   };
   return (
-    <div className={classes.selector}>
+    <details className={classes.selector}>
+      <summary className={classes.resumen}>Datos: {nombre}</summary>
       <SegmentedControl size="xs" data={OPCIONES} value={actual} onChange={cambiar} />
-    </div>
+    </details>
   );
 }

@@ -21,6 +21,14 @@ describe('ConnectionBadge', () => {
     expect(screen.getByText('último dato hace 5 s')).toBeInTheDocument();
   });
 
+  it('anuncia el estado pero no la antigüedad, que cambia cada medio segundo', () => {
+    renderUi(<ConnectionBadge conexion="reconectando" antiguedadMs={5400} />);
+    const vivo = screen.getByRole('status');
+    expect(vivo).toHaveTextContent('Reconectando');
+    expect(vivo).not.toHaveTextContent(/último dato/);
+    expect(screen.getByText('último dato hace 5 s').closest('[role="status"], [aria-live]')).toBeNull();
+  });
+
   it('no muestra la antigüedad con datos frescos', () => {
     renderUi(<ConnectionBadge conexion="en_vivo_ws" antiguedadMs={1500} />);
     expect(screen.queryByText(/último dato/)).not.toBeInTheDocument();

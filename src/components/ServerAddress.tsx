@@ -42,11 +42,14 @@ export function ServerAddress() {
     return (
       <button
         type="button"
-        className={classes.direccion}
+        className={`${classes.direccion} presionable`}
         onClick={empezar}
         aria-label={`Cambiar dirección del backend (${hostDeDireccion(direccion)})`}
       >
-        {hostDeDireccion(direccion)} ✎
+        {hostDeDireccion(direccion)}
+        <svg className={classes.icono} viewBox="0 0 16 16" aria-hidden>
+          <path d="M10.8 2.7a1.6 1.6 0 0 1 2.3 2.3L5.5 12.6 2.5 13.5l.9-3z" />
+        </svg>
       </button>
     );
   }

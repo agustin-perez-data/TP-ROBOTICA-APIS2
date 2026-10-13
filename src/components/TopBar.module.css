@@ -9,9 +9,15 @@
 }
 
 .robot {
+  margin: 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: calc(18px * var(--escala));
   font-weight: 700;
-  white-space: nowrap;
+  line-height: 1.3;
 }
 
 .robot small {
@@ -21,12 +27,18 @@
   color: var(--c-barra-tenue);
 }
 
-.espacio {
-  flex: 1;
-}
-
+/* Right-aligned on its row, also when the bar wraps to two rows. */
 .acciones {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-left: auto;
+}
+
+/* Mantine's ring is the primary blue: 2.5:1 on the dark bar and invisible on a blue button.
+   Doubled class to outrank Mantine's .mantine-focus-auto:focus-visible regardless of load order. */
+.barra.barra :focus-visible {
+  outline: 2px solid var(--c-foco-barra);
+  outline-offset: 2px;
 }

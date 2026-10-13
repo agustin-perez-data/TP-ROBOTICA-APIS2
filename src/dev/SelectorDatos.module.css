@@ -1,8 +1,36 @@
 .selector {
   position: fixed;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 8px;
+  bottom: 8px;
   z-index: 100;
+  display: grid;
+  justify-items: end;
+  gap: 6px;
   font-family: system-ui, sans-serif;
+}
+
+.resumen {
+  list-style: none;
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 11px;
+  background: var(--c-barra);
+  color: var(--c-barra-texto);
+  opacity: 0.5;
+}
+
+.resumen::-webkit-details-marker {
+  display: none;
+}
+
+.selector[open] .resumen,
+.resumen:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .resumen:hover {
+    opacity: 1;
+  }
 }

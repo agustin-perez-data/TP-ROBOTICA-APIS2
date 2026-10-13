@@ -1,5 +1,6 @@
 import { Button } from '@mantine/core';
 import { useAntiguedad, useTelemetria } from '../app/hooks';
+import { plural } from '../ui/format';
 import { CapturaControles } from './CapturaControles';
 import { ConnectionBadge } from './ConnectionBadge';
 import { ServerAddress } from './ServerAddress';
@@ -16,19 +17,22 @@ export function TopBar({
 }) {
   const { info, conexion, ultimoDatoEn } = useTelemetria();
   const antiguedad = useAntiguedad(ultimoDatoEn);
+  const nombre = info ? info.nombre : 'Buscando robot…';
   const detalle = info
-    ? [TIPO[info.tipo] ?? info.tipo, `${info.motores.length} motores`].filter(Boolean).join(' · ')
+    ? [TIPO[info.tipo] ?? info.tipo, plural(info.motores.length, 'motor', 'motores')]
+        .filter(Boolean)
+        .join(' · ')
     : null;
 
   return (
     <header className={classes.barra}>
-      <div className={classes.robot}>
-        {info ? info.nombre : 'Buscando robot…'}
+      {/* A long name from /info is cut with an ellipsis; the title keeps the full text. */}
+      <h1 className={classes.robot} title={detalle ? `${nombre} · ${detalle}` : nombre}>
+        {nombre}
         {detalle && <small>{detalle}</small>}
-      </div>
+      </h1>
       <ConnectionBadge conexion={conexion} antiguedadMs={antiguedad} />
       {!presentacion && <ServerAddress />}
-      <span className={classes.espacio} />
       <div className={classes.acciones}>
         <Button variant="outline" color="gray" onClick={onAlternarPresentacion}>
           {presentacion ? 'Salir de presentación' : 'Modo presentación'}

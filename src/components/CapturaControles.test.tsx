@@ -36,17 +36,33 @@ describe('CapturaControles', () => {
     descargarCsv.mockClear();
   });
 
-  it('sin datos no deja capturar y sin muestras no deja exportar', () => {
+  it('sin datos no deja capturar y sin muestras no deja exportar', async () => {
+    const usuario = userEvent.setup();
     renderUi(<CapturaControles />);
     expect(screen.getByRole('button', { name: 'Capturar muestra' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Exportar CSV (0)' })).toBeDisabled();
+    const exportar = screen.getByRole('button', { name: 'Exportar CSV (0)' });
+    expect(exportar).toHaveAttribute('aria-disabled', 'true');
+    await usuario.click(exportar);
+    expect(descargarCsv).not.toHaveBeenCalled();
+  });
+
+  it('explica por qué no se puede exportar también con el teclado', async () => {
+    const usuario = userEvent.setup();
+    renderUi(<CapturaControles />);
+    const exportar = screen.getByRole('button', { name: 'Exportar CSV (0)' });
+    expect(exportar).toHaveAccessibleDescription('Capturá al menos una muestra para exportar');
+    await usuario.tab();
+    expect(exportar).toHaveFocus();
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Capturá al menos una muestra para exportar');
   });
 
   it('capturar suma una muestra y lo confirma', async () => {
     const usuario = userEvent.setup();
     await conDatos();
     await usuario.click(screen.getByRole('button', { name: 'Capturar muestra' }));
-    expect(screen.getByRole('button', { name: 'Exportar CSV (1)' })).toBeEnabled();
+    const exportar = screen.getByRole('button', { name: 'Exportar CSV (1)' });
+    expect(exportar).not.toHaveAttribute('aria-disabled');
+    expect(exportar).not.toHaveAccessibleDescription();
     expect(screen.getByRole('status')).toHaveTextContent('Muestra 1 capturada');
   });
 

@@ -20,9 +20,10 @@ export function ConnectionBadge({
 }) {
   const viejo = antiguedadMs !== null && antiguedadMs > UMBRAL_DATO_VIEJO_MS;
   return (
-    <span className={classes.badge} data-conexion={conexion} role="status">
+    <span className={classes.badge} data-conexion={conexion}>
       <span className={classes.punto} aria-hidden />
-      <span>{TEXTO_CONEXION[conexion]}</span>
+      {/* Only the state is live. The age ticks every 500 ms and would be announced non-stop. */}
+      <span role="status">{TEXTO_CONEXION[conexion]}</span>
       {viejo && (
         <span className={classes.antiguedad}>
           último dato hace {Math.floor(antiguedadMs / 1000)} s

@@ -1,4 +1,10 @@
+/* Floats left of the actions instead of reserving an empty gap between the buttons. */
 .aviso {
+  position: absolute;
+  right: calc(100% + 8px);
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 1;
   font-size: 13px;
   font-weight: 600;
   color: var(--c-barra-texto);
