@@ -1,16 +1,83 @@
+import { Tooltip } from '@mantine/core';
 import type { Bateria } from '../telemetry/model';
 import { formatearNumero } from '../ui/format';
 import classes from './BmsPanel.module.css';
 import { Panel } from './Panel';
 
+/** "celda 3" or "celdas 1, 6 y 11" (1-based). */
+function nombrarCeldas(indices: number[]): string {
+  const numeros = indices.map((i) => String(i + 1));
+  if (numeros.length === 1) return `celda ${numeros[0]}`;
+  return `celdas ${numeros.slice(0, -1).join(', ')} y ${numeros.at(-1)}`;
+}
+
+function indicesCon(celdas: number[], valor: number): number[] {
+  return celdas.flatMap((v, i) => (v === valor ? [i] : []));
+}
+
+function Celdas({ celdas }: { celdas: number[] }) {
+  const min = Math.min(...celdas);
+  const max = Math.max(...celdas);
+  const rango = max - min;
+  const parejas = rango === 0;
+  // Scaled to the observed range so the weakest cell stands out; 15 % floor keeps bars visible.
+  // The caption states that range, so millivolt differences are not mistaken for a fault.
+  const alto = (v: number) => (parejas ? 60 : 15 + 85 * ((v - min) / rango));
+  const volts = (v: number) => `${formatearNumero(v, 3)} V`;
+
+  return (
+    <>
+      {/* One group: after the first tooltip opens, moving to the next bar shows it with no delay. */}
+      <Tooltip.Group openDelay={120} closeDelay={60}>
+        <ul className={classes.celdas} aria-label="Voltaje por celda">
+          {celdas.map((v, i) => (
+            <Tooltip
+              key={i}
+              label={
+                <>
+                  <b>{volts(v)}</b> · celda {i + 1}
+                </>
+              }
+              position="top"
+              withArrow
+            >
+              <li
+                className={classes.celda}
+                aria-label={`Celda ${i + 1}: ${volts(v)}`}
+                data-minima={!parejas && v === min ? 'true' : undefined}
+              >
+                <span className={classes.columna} style={{ height: `${alto(v)}%` }} />
+              </li>
+            </Tooltip>
+          ))}
+        </ul>
+      </Tooltip.Group>
+
+      {parejas ? (
+        <div className={classes.pie}>Todas las celdas en {volts(min)}</div>
+      ) : (
+        <>
+          <div className={classes.extremos}>
+            <span className={classes.extremo} data-extremo="minimo">
+              Mín. {volts(min)} · {nombrarCeldas(indicesCon(celdas, min))}
+            </span>
+            <span className={classes.extremo} data-extremo="maximo">
+              Máx. {volts(max)} · {nombrarCeldas(indicesCon(celdas, max))}
+            </span>
+          </div>
+          <div className={classes.pie}>
+            Celdas · escala <span className={classes.cifra}>{`${formatearNumero(min, 3)}–${volts(max)}`}</span>{' '}
+            · diferencia máx. <span className={classes.cifra}>{volts(rango)}</span>
+          </div>
+        </>
+      )}
+    </>
+  );
+}
+
 export function BmsPanel({ bateria }: { bateria: Bateria | null }) {
   const soc = bateria?.soc ?? null;
   const celdas = bateria?.celdas ?? [];
-  const min = celdas.length ? Math.min(...celdas) : 0;
-  const max = celdas.length ? Math.max(...celdas) : 0;
-  const rango = max - min;
-  // Scaled to the observed range so the weakest cell stands out; 15 % floor keeps bars visible.
-  const alto = (v: number) => (rango > 0 ? 15 + 85 * ((v - min) / rango) : 60);
 
   return (
     <Panel titulo="Batería">
@@ -44,28 +111,7 @@ export function BmsPanel({ bateria }: { bateria: Bateria | null }) {
             <span>Temperatura</span>
             <span>{formatearNumero(bateria?.temperatura ?? null, 1)} °C</span>
           </div>
-          {celdas.length > 0 && (
-            <>
-              <ul className={classes.celdas} aria-label="Voltaje por celda">
-                {celdas.map((v, i) => (
-                  <li
-                    key={i}
-                    className={classes.celda}
-                    style={{ height: `${alto(v)}%` }}
-                    aria-label={`Celda ${i + 1}: ${formatearNumero(v, 3)} V`}
-                  />
-                ))}
-              </ul>
-              <div className={classes.etiquetas} aria-hidden>
-                {celdas.map((v, i) => (
-                  <span key={i}>{formatearNumero(v, 3)}</span>
-                ))}
-              </div>
-              <div className={classes.pie}>
-                Celdas (V) · diferencia máx. {formatearNumero(rango, 3)} V
-              </div>
-            </>
-          )}
+          {celdas.length > 0 && <Celdas celdas={celdas} />}
         </>
       )}
     </Panel>

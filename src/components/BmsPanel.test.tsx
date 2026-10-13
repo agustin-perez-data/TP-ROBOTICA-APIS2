@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { renderUi } from '../test/render';
 import { BmsPanel } from './BmsPanel';
@@ -20,7 +21,31 @@ describe('BmsPanel', () => {
     expect(screen.getByText('Corriente').nextSibling).toHaveTextContent('1.446 mA');
     expect(screen.getByText('Temperatura').nextSibling).toHaveTextContent('31,6 °C');
     expect(screen.getAllByRole('listitem')).toHaveLength(8);
-    expect(screen.getByText('Celdas (V) · diferencia máx. 0,029 V')).toBeInTheDocument();
+  });
+
+  it('etiqueta solo la celda mínima y la máxima, y explicita la escala', () => {
+    renderUi(<BmsPanel bateria={completa} />);
+    expect(screen.getByText('Mín. 3,695 V · celda 5')).toBeInTheDocument();
+    expect(screen.getByText('Máx. 3,724 V · celdas 2 y 8')).toBeInTheDocument();
+    expect(screen.getByText(/^Celdas · escala/)).toHaveTextContent(
+      'Celdas · escala 3,695–3,724 V · diferencia máx. 0,029 V',
+    );
+    // No per-bar number: 16 of them do not fit and were clipped into wrong values.
+    expect(screen.queryByText('3,718')).not.toBeInTheDocument();
+  });
+
+  it('cada barra lleva su voltaje exacto y la mínima se resalta', () => {
+    renderUi(<BmsPanel bateria={completa} />);
+    const minima = screen.getByRole('listitem', { name: 'Celda 5: 3,695 V' });
+    expect(minima).toHaveAttribute('data-minima', 'true');
+    expect(screen.getByRole('listitem', { name: 'Celda 1: 3,718 V' })).not.toHaveAttribute('data-minima');
+  });
+
+  it('al pasar el mouse por una barra muestra su voltaje', async () => {
+    const usuario = userEvent.setup();
+    renderUi(<BmsPanel bateria={completa} />);
+    await usuario.hover(screen.getByRole('listitem', { name: 'Celda 4: 3,703 V' }));
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('3,703 V · celda 4');
   });
 
   it('muestra la corriente negativa con signo', () => {
@@ -40,7 +65,16 @@ describe('BmsPanel', () => {
   it('con 16 celdas las dibuja todas', () => {
     renderUi(<BmsPanel bateria={{ ...completa, celdas: Array.from({ length: 16 }, () => 3.7) }} />);
     expect(screen.getAllByRole('listitem')).toHaveLength(16);
-    expect(screen.getByText('Celdas (V) · diferencia máx. 0,000 V')).toBeInTheDocument();
+    expect(screen.getByText('Todas las celdas en 3,700 V')).toBeInTheDocument();
+    expect(screen.queryByText(/^Mín\./)).not.toBeInTheDocument();
+  });
+
+  it('con 16 celdas distintas nombra todas las que empatan en la mínima', () => {
+    const celdas = Array.from({ length: 16 }, (_, i) => 3.2 + (i % 5) * 0.12);
+    renderUi(<BmsPanel bateria={{ ...completa, celdas }} />);
+    expect(screen.getByText('Mín. 3,200 V · celdas 1, 6, 11 y 16')).toBeInTheDocument();
+    expect(screen.getByText('Máx. 3,680 V · celdas 5, 10 y 15')).toBeInTheDocument();
+    expect(screen.getByText(/^Celdas · escala/)).toHaveTextContent('escala 3,200–3,680 V');
   });
 
   it('sin datos muestra —', () => {
