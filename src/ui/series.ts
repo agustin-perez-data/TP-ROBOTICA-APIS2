@@ -1,10 +1,13 @@
+/** The backend computes yaw with atan2 in degrees, so it lives in (−180, 180]. */
+export const DOMINIO_YAW = [-180, 180] as const;
+
 export interface PuntoSerie {
   x: number;
   y: number | null;
 }
 
 /**
- * Breaks a heading series where it wraps around (359° → 0°): a null point between the two samples
+ * Breaks a heading series where it wraps around (179° → −179°): a null point between the two samples
  * leaves a gap instead of a vertical line across the chart. The gap sits at the midpoint so the
  * series stays sorted by x.
  */
@@ -12,7 +15,12 @@ export function cortarVueltas(valores: readonly PuntoSerie[], salto = 180): Punt
   const salida: PuntoSerie[] = [];
   let anterior: PuntoSerie | undefined;
   for (const punto of valores) {
-    if (anterior && anterior.y !== null && punto.y !== null && Math.abs(punto.y - anterior.y) > salto) {
+    if (
+      anterior &&
+      anterior.y !== null &&
+      punto.y !== null &&
+      Math.abs(punto.y - anterior.y) > salto
+    ) {
       salida.push({ x: (anterior.x + punto.x) / 2, y: null });
     }
     salida.push(punto);
@@ -28,7 +36,7 @@ export function decimalesDelPaso(paso: number): number {
   return 2;
 }
 
-/** Keeps an axis inside its valid domain (a heading never goes past 0–360°). */
+/** Keeps an axis inside its valid domain (a heading never goes past −180–180°). */
 export function acotarEje<T extends { value: number }>(
   eje: { min: number; max: number; ticks: T[] },
   [minimo, maximo]: readonly [number, number],

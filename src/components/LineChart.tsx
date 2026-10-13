@@ -34,11 +34,13 @@ export function LineChart({
     sugeridoMax?: number;
     /** Valid range of the quantity; the axis never shows values outside it. */
     dominio?: readonly [number, number];
+    /** Fixed tick step (e.g. 90° for a heading). */
+    paso?: number;
     sufijo: string;
   };
   etiqueta: string;
 }) {
-  const { sugeridoMin, sugeridoMax, dominio, sufijo } = ejeY;
+  const { sugeridoMin, sugeridoMax, dominio, sufijo, paso: pasoFijo } = ejeY;
   const opciones = useMemo<ChartOptions<'line'>>(() => {
     const fuente = (px: number) => ({ size: Math.round(px * escala) });
     return {
@@ -97,6 +99,7 @@ export function LineChart({
             color: token('--c-apagado'),
             font: fuente(FUENTE_TICKS_PX),
             maxTicksLimit: 5,
+            stepSize: pasoFijo,
             callback: (v, _i, ticks) => {
               const paso = ticks.length > 1 ? Math.abs(ticks[1]!.value - ticks[0]!.value) : 1;
               return `${formatearNumero(Number(v), decimalesDelPaso(paso))}${sufijo}`;
@@ -105,7 +108,7 @@ export function LineChart({
         },
       },
     };
-  }, [dominio, escala, sufijo, sugeridoMax, sugeridoMin, ventanaSegundos]);
+  }, [dominio, escala, pasoFijo, sufijo, sugeridoMax, sugeridoMin, ventanaSegundos]);
 
   const datos = {
     datasets: series.map((s) => ({

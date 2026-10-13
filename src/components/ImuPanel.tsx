@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import type { PuntoImu } from '../telemetry/history';
 import type { Imu } from '../telemetry/model';
 import { formatearNumero } from '../ui/format';
-import { cortarVueltas } from '../ui/series';
+import { cortarVueltas, DOMINIO_YAW } from '../ui/series';
 import { token, type Token } from '../ui/tokens';
 import classes from './ImuPanel.module.css';
 import { LineChart } from './LineChart';
@@ -15,8 +15,6 @@ const COLOR_YAW: Token = '--c-tinta-2';
 
 /** 120 samples at 10 Hz. Fixed so the x axis does not jump as the buffer fills. */
 export const VENTANA_SEGUNDOS = 12;
-
-const DOMINIO_YAW = [0, 360] as const;
 
 export function ImuPanel({
   imu,
@@ -68,10 +66,10 @@ export function ImuPanel({
       <p className={classes.subtitulo}>Yaw (rumbo, con su propia escala)</p>
       <LineChart
         etiqueta="Gráfico de yaw"
-        alto={70}
+        alto={96}
         escala={escala}
         ventanaSegundos={VENTANA_SEGUNDOS}
-        ejeY={{ sufijo: '°', dominio: DOMINIO_YAW }}
+        ejeY={{ sufijo: '°', dominio: DOMINIO_YAW, paso: 90 }}
         series={[{ nombre: 'Yaw', color: token(COLOR_YAW), valores: cortarVueltas(serie('yaw')) }]}
       />
     </Panel>

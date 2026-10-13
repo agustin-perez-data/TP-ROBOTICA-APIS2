@@ -10,7 +10,7 @@ interface PropsLinea {
   etiqueta: string;
   ventanaSegundos: number;
   escala?: number;
-  ejeY: { dominio?: readonly [number, number] };
+  ejeY: { dominio?: readonly [number, number]; paso?: number };
 }
 const { lineas } = vi.hoisted(() => ({ lineas: [] as PropsLinea[] }));
 vi.mock('./LineChart', () => ({
@@ -21,7 +21,12 @@ vi.mock('./LineChart', () => ({
 }));
 
 const imu = { roll: 0, pitch: -2.07, yaw: 78.2, ax: 0, ay: 0, az: 9.81 };
-const puntos = Array.from({ length: 5 }, (_, i) => ({ ts: 10 + i * 0.1, roll: 0, pitch: i, yaw: 78 }));
+const puntos = Array.from({ length: 5 }, (_, i) => ({
+  ts: 10 + i * 0.1,
+  roll: 0,
+  pitch: i,
+  yaw: 78,
+}));
 
 /** The value paired with a term of the roll/pitch/yaw description list. */
 const valor = (nombre: string) => screen.getByText(nombre, { selector: 'dt' }).nextElementSibling;
@@ -42,15 +47,23 @@ describe('ImuPanel', () => {
     expect(lineas.map((l) => l.ventanaSegundos)).toEqual([12, 12]);
   });
 
-  it('corta el yaw al dar la vuelta y lo limita a 0–360°', () => {
+  it('corta el yaw al cruzar ±180° y lo limita a −180–180°', () => {
     lineas.length = 0;
-    const vuelta = [358, 359.5, 0.5].map((yaw, i) => ({ ts: 10 + i * 0.1, roll: 0, pitch: 0, yaw }));
+    const vuelta = [178, 179.5, -179.5].map((yaw, i) => ({
+      ts: 10 + i * 0.1,
+      roll: 0,
+      pitch: 0,
+      yaw,
+    }));
     renderUi(<ImuPanel imu={imu} puntos={vuelta} />);
     const yaw = lineas[1]!;
     expect((yaw.series[0]!.valores as Array<{ y: number | null }>).map((p) => p.y)).toEqual([
-      358, 359.5, null, 0.5,
+      178,
+      179.5,
+      null,
+      -179.5,
     ]);
-    expect(yaw.ejeY.dominio).toEqual([0, 360]);
+    expect(yaw.ejeY.dominio).toEqual([-180, 180]);
   });
 
   it('agranda los gráficos en modo presentación', () => {

@@ -2,6 +2,9 @@ import { infoG1, infoGo2, telemetriaG1, telemetriaGo2 } from '../telemetry/__fix
 
 export type Escenario = 'peor' | 'g1';
 
+/** Heading spinning at 40°/s, wrapped into the backend's (−180, 180] range so it crosses ±180. */
+const yawGirando = (t: number) => ((((t * 40) % 360) + 540) % 360) - 180;
+
 /** Worst realistic data (break-ui): exact thresholds, missing values, charging, 16 cells, unknown foot. */
 function peorCaso(t: number): unknown {
   const oscila = Math.sin(t);
@@ -17,7 +20,7 @@ function peorCaso(t: number): unknown {
       if (i === 5) return { ...m, torque: 123456.789, angulo: -179.99 };
       return { ...m, angulo: m.angulo + 10 * oscila };
     }),
-    imu: { ...telemetriaGo2.imu, roll: 25 * oscila, pitch: -40 * oscila, yaw: 359.9 },
+    imu: { ...telemetriaGo2.imu, roll: 25 * oscila, pitch: -40 * oscila, yaw: yawGirando(t) },
     bms: {
       soc: 130,
       corriente: -2500,
@@ -38,7 +41,8 @@ function g1EnMovimiento(t: number): unknown {
   };
 }
 
-export const ESCENARIOS: Record<Escenario, { info: unknown; telemetria: (t: number) => unknown }> = {
-  peor: { info: { ...infoGo2, nombre: 'Unitree Go2 EDU (peor caso)' }, telemetria: peorCaso },
-  g1: { info: infoG1, telemetria: g1EnMovimiento },
-};
+export const ESCENARIOS: Record<Escenario, { info: unknown; telemetria: (t: number) => unknown }> =
+  {
+    peor: { info: { ...infoGo2, nombre: 'Unitree Go2 EDU (peor caso)' }, telemetria: peorCaso },
+    g1: { info: infoG1, telemetria: g1EnMovimiento },
+  };

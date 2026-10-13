@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { acotarEje, cortarVueltas, decimalesDelPaso } from './series';
+import { acotarEje, cortarVueltas, DOMINIO_YAW, decimalesDelPaso } from './series';
 
 describe('cortarVueltas', () => {
   it('corta la serie cuando el rumbo pasa de 359 a 0', () => {
@@ -50,10 +50,23 @@ describe('decimalesDelPaso', () => {
 
 describe('acotarEje', () => {
   it('saca del eje los valores fuera del dominio', () => {
-    const eje = { min: 340, max: 380, ticks: [340, 350, 360, 370, 380].map((value) => ({ value })) };
+    const eje = {
+      min: 340,
+      max: 380,
+      ticks: [340, 350, 360, 370, 380].map((value) => ({ value })),
+    };
     acotarEje(eje, [0, 360]);
     expect(eje.min).toBe(340);
     expect(eje.max).toBe(360);
     expect(eje.ticks.map((t) => t.value)).toEqual([340, 350, 360]);
+  });
+
+  it('deja pasar un rumbo negativo dentro de −180–180°', () => {
+    const eje = { min: -200, max: 200, ticks: [-200, -90, 0, 90, 200].map((value) => ({ value })) };
+    acotarEje(eje, DOMINIO_YAW);
+    expect(eje.min).toBe(-180);
+    expect(eje.max).toBe(180);
+    expect(eje.ticks.map((t) => t.value)).toEqual([-90, 0, 90]);
+    expect(-120).toBeGreaterThanOrEqual(eje.min);
   });
 });
