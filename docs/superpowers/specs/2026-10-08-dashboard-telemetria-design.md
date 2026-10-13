@@ -53,6 +53,8 @@ Probado localmente con `arrancar_api.py --demo --robot go2`:
 - En modo simulador, `bms` llega vacío (`corriente: 0`, `temperatura: 0`, `celdas: []`). En `--demo` trae
   8 celdas.
 - En `--demo`, roll y yaw valen siempre 0; solo pitch oscila.
+- El yaw sale de `atan2` en grados, así que vive en (−180, 180]. El eje del gráfico usa ese rango y el corte
+  por vuelta se da al cruzar ±180°.
 - `/info` del G1 declara las patas `R_foot` y `L_foot`, aunque `API.md` dice que el G1 no reporta patas.
 - `fuerzas` es binario: 1 = apoyada, 0 = en el aire.
 - `ts` son segundos desde que arrancó el backend: vuelve a 0 si el backend se reinicia.
@@ -129,7 +131,7 @@ Claro, inspirado en instrumental de laboratorio. Se proyecta bien en un aula con
 | Fondo | `#E9ECEF` | gris aluminio de la página |
 | Tinta | `#1E252C` | texto principal y barra superior |
 | Tinta secundaria | `#52606D` | encabezados y etiquetas |
-| Apagado | `#7B8794` | texto terciario |
+| Apagado | `#616E7C` | texto terciario (oscurecido para cumplir el contraste mínimo) |
 | Panel | `#FFFFFF` con borde `#CBD2D9` | superficie de cada panel |
 | Señal | `#1F5FBF` | dato principal, botón primario, serie Roll, pata apoyada |
 | Serie 2 | `#B4540A` | serie Pitch |
@@ -157,13 +159,14 @@ presentación, Capturar muestra, Exportar CSV (n).
 - Columnas: Motor · Ángulo (°) · Velocidad (rad/s) · Torque (Nm) · Temperatura.
 - Semáforo con el criterio de electroSim: < 40 °C normal (●), ≥ 40 °C elevada (▲), ≥ 60 °C crítica (■).
   Cada estado lleva forma, número y color.
-- Una línea de alerta arriba de la tabla nombra los motores en estado crítico, como electroSim.
+- Una línea de alerta arriba de la tabla nombra los motores en estado crítico, como electroSim. Su lugar está
+  reservado aunque no haya alerta, para que la tabla no salte cuando aparece.
 - Una línea divisoria más marcada cada 3 motores, que separa las patas del Go2.
 - Con el G1 (29 motores): scroll interno con el encabezado fijo.
 
 **Inclinación (IMU)**
 
-- Valores numéricos grandes de roll, pitch y yaw.
+- Valores numéricos grandes de roll, pitch y yaw. El yaw va de −180° a 180°.
 - Gráfico de línea de roll y pitch (eje en grados), más un gráfico aparte para yaw con su propia escala.
   Juntarlos aplastaría roll y pitch.
 - Se ven 120 muestras (~12 s); la consigna pide al menos 60.
@@ -172,8 +175,10 @@ presentación, Capturar muestra, Exportar CSV (n).
 **Batería (BMS)**
 
 - Carga (%) en número y barra; corriente (mA) y temperatura (°C).
-- Una barra por celda con su voltaje, en una escala ajustada al rango para que se note la más baja, más la
-  diferencia máxima entre celdas.
+- Una barra por celda, en una escala ajustada al rango de voltajes para que se note la más baja. Solo se
+  rotulan el mínimo y el máximo (con sus celdas), se muestra el rango de la escala en texto y la diferencia
+  máxima entre celdas. Cada barra tiene su voltaje en un tooltip y en su `aria-label`.
+- La temperatura se muestra siempre con un decimal.
 - Si el modo no trae datos (simulador), el panel lo explica en vez de mostrar ceros.
 
 **Patas**
