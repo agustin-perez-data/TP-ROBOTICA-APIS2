@@ -2,7 +2,8 @@
   --c-fondo: #e9ecef;
   --c-tinta: #1e252c;
   --c-tinta-2: #52606d;
-  --c-apagado: #7b8794;
+  /* Darkened from the spec's #7b8794 (3.66:1) to pass WCAG AA for small text (5.21:1). */
+  --c-apagado: #616e7c;
   --c-panel: #ffffff;
   --c-borde: #cbd2d9;
   --c-borde-suave: #e4e7eb;
@@ -19,7 +20,15 @@
   --c-elevada: #7a5b00;
   --c-critica-fondo: #fde2e1;
   --c-critica: #9b1c1c;
+  --c-critica-borde: #f5b5b1;
+  /* Cell bars: 3.75:1 against the panel; the lowest cell uses --c-senal. */
+  --c-celda: #4c85d3;
   --c-vivo: #4cc38a;
+  /* Status colors that sit on the dark top bar. */
+  --c-reconectando: #f4cd5c;
+  --c-sin-conexion: #ff8a80;
+  --c-barra-error: #ffb4ab;
+  --c-foco-barra: #a3c1ea;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --escala: 1;
 }
@@ -38,7 +47,7 @@ body {
 }
 
 .presionable {
-  transition: transform 160ms ease-out;
+  transition: transform 160ms var(--ease-out);
 }
 
 .presionable:active:not(:disabled):not([data-disabled]) {

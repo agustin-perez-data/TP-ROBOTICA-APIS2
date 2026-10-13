@@ -1,7 +1,7 @@
 .alerta {
   background: var(--c-critica-fondo);
   color: var(--c-critica);
-  border: 1px solid #f5b5b1;
+  border: 1px solid var(--c-critica-borde);
   border-radius: 5px;
   padding: 6px 10px;
   font-weight: 600;

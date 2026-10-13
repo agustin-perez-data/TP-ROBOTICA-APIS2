@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
 import { crosshair } from '../ui/charts';
 import { formatearNumero } from '../ui/format';
+import { token } from '../ui/tokens';
 
 export interface SerieLinea {
   nombre: string;
@@ -48,14 +49,14 @@ export function LineChart({
           min: -ventanaSegundos,
           max: 0,
           grid: { display: false },
-          ticks: { callback: (v) => `${formatearNumero(Number(v), 0)} s`, maxTicksLimit: 5 },
+          ticks: { color: token('--c-apagado'), callback: (v) => `${formatearNumero(Number(v), 0)} s`, maxTicksLimit: 5 },
         },
         y: {
           suggestedMin: ejeY.sugeridoMin,
           suggestedMax: ejeY.sugeridoMax,
-          grid: { color: '#e4e7eb' },
+          grid: { color: token('--c-borde-suave') },
           border: { display: false },
-          ticks: { callback: (v) => `${formatearNumero(Number(v), 0)}${ejeY.sufijo}`, maxTicksLimit: 5 },
+          ticks: { color: token('--c-apagado'), callback: (v) => `${formatearNumero(Number(v), 0)}${ejeY.sufijo}`, maxTicksLimit: 5 },
         },
       },
     }),

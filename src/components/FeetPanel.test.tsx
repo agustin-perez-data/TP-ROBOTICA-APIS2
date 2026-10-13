@@ -8,7 +8,7 @@ describe('resumenPatas', () => {
   it.each([
     [{ FR: 'en_el_aire', FL: 'apoyada', RR: 'apoyada', RL: 'apoyada' }, '3 apoyadas · FR en el aire'],
     [{ FR: 'apoyada', FL: 'apoyada', RR: 'apoyada', RL: 'apoyada' }, '4 apoyadas'],
-    [{ R_foot: 'apoyada', L_foot: 'en_el_aire' }, '1 apoyada · L_foot en el aire'],
+    [{ R_foot: 'apoyada', L_foot: 'en_el_aire' }, '1 apoyada · L en el aire'],
     [{ FR: 'desconocido', FL: 'apoyada' }, '1 apoyada · FR sin dato'],
     [{ FR: 'en_el_aire', FL: 'en_el_aire' }, '0 apoyadas · FR, FL en el aire'],
   ] as const)('%j → %s', (patas, esperado) => {
@@ -27,12 +27,15 @@ describe('FeetPanel', () => {
     expect(screen.getByLabelText('FR: en el aire')).toBeInTheDocument();
     expect(screen.getByLabelText('FL: apoyada')).toBeInTheDocument();
     expect(screen.getByText('3 apoyadas · FR en el aire')).toBeInTheDocument();
+    expect(screen.getByLabelText('FR: en el aire')).toHaveAttribute('data-estado', 'en_el_aire');
   });
 
   it('dibuja los pies del G1', () => {
     renderUi(<FeetPanel nombres={['R_foot', 'L_foot']} patas={{ R_foot: 'apoyada', L_foot: 'en_el_aire' }} />);
-    expect(screen.getByLabelText('R_foot: apoyada')).toBeInTheDocument();
-    expect(screen.getByLabelText('L_foot: en el aire')).toBeInTheDocument();
+    // Same short label in the diagram, its accessible name and the summary.
+    expect(screen.getByLabelText('R: apoyada')).toBeInTheDocument();
+    expect(screen.getByLabelText('L: en el aire')).toBeInTheDocument();
+    expect(screen.getByText('1 apoyada · L en el aire')).toBeInTheDocument();
   });
 
   it('sin patas lo aclara', () => {

@@ -27,7 +27,7 @@
 }
 
 .error {
-  color: #ffb4ab;
+  color: var(--c-barra-error);
   font-size: 12px;
   margin-top: 2px;
 }

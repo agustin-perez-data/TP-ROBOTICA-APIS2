@@ -28,5 +28,6 @@
 
 .badge[data-estado='desconocida'] {
   background: var(--c-borde-suave);
-  color: var(--c-apagado);
+  /* --c-apagado would fall under 4.5:1 on this background. */
+  color: var(--c-tinta-2);
 }

@@ -24,11 +24,11 @@
 }
 
 .badge[data-conexion='reconectando'] .punto {
-  background: #f4cd5c;
+  background: var(--c-reconectando);
 }
 
 .badge[data-conexion='sin_conexion'] .punto {
-  background: #ff8a80;
+  background: var(--c-sin-conexion);
 }
 
 .antiguedad {

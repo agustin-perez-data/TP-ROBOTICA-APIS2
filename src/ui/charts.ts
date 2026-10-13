@@ -7,13 +7,13 @@ import {
   Tooltip,
   type Plugin,
 } from 'chart.js';
+import { token } from './tokens';
 
 Chart.register(LineController, LineElement, PointElement, LinearScale, Tooltip);
 
 // Telemetry updates 10 times per second: animating it would only add lag.
 Chart.defaults.animation = false;
 Chart.defaults.font.family = "'Barlow', system-ui, sans-serif";
-Chart.defaults.color = '#7b8794';
 
 /** Vertical guide at the hovered x, so the tooltip value can be read against the line. */
 export const crosshair: Plugin<'line'> = {
@@ -26,7 +26,7 @@ export const crosshair: Plugin<'line'> = {
     const { top, bottom } = chart.chartArea;
     const ctx = chart.ctx;
     ctx.save();
-    ctx.strokeStyle = '#9aa5b1';
+    ctx.strokeStyle = token('--c-divisor');
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(x, top);

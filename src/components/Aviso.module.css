@@ -11,8 +11,8 @@
   pointer-events: none;
   /* Exit: faster than the entrance. */
   transition:
-    opacity 120ms ease-out,
-    transform 120ms ease-out;
+    opacity 120ms var(--ease-out),
+    transform 120ms var(--ease-out);
 }
 
 .aviso[data-visible='true'] {
