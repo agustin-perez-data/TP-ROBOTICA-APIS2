@@ -1,0 +1,40 @@
+.direccion {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: var(--c-barra-2);
+  color: var(--c-barra-tenue);
+  font: 500 13px 'Barlow', sans-serif;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .direccion:hover {
+    color: var(--c-barra-texto);
+  }
+}
+
+.icono {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.form {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.error {
+  color: var(--c-barra-error);
+  font-size: 12px;
+  margin-top: 2px;
+}

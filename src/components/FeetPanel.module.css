@@ -1,0 +1,46 @@
+.vista {
+  display: block;
+  margin: 4px auto 0;
+  width: calc(150px * var(--escala));
+  max-width: 100%;
+}
+
+.cuerpo {
+  fill: var(--c-borde-suave);
+  stroke: var(--c-divisor);
+}
+
+.frente {
+  fill: var(--c-apagado);
+}
+
+/* Foot not touching the ground (or without data): dark outline, 3:1 or more against the panel. */
+.pata circle {
+  fill: var(--c-panel);
+  stroke: var(--c-tinta-2);
+}
+
+.pata text {
+  fill: var(--c-tinta-2);
+}
+
+.pata[data-estado='apoyada'] circle {
+  fill: var(--c-senal);
+  stroke: var(--c-senal);
+}
+
+.pata[data-estado='apoyada'] text {
+  fill: var(--c-panel);
+}
+
+.pie {
+  font-size: calc(13px * var(--escala));
+  color: var(--c-tinta-2);
+  text-align: center;
+  margin-top: 6px;
+}
+
+.vacio {
+  color: var(--c-apagado);
+  font-size: 13px;
+}

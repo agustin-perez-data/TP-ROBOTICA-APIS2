@@ -1,0 +1,58 @@
+:root {
+  --c-fondo: #e9ecef;
+  --c-tinta: #1e252c;
+  --c-tinta-2: #52606d;
+  /* Darkened from the spec's #7b8794 (3.66:1) to pass WCAG AA for small text (5.21:1). */
+  --c-apagado: #616e7c;
+  --c-panel: #ffffff;
+  --c-borde: #cbd2d9;
+  --c-borde-suave: #e4e7eb;
+  --c-divisor: #9aa5b1;
+  --c-barra: #1e252c;
+  --c-barra-2: #2e3a46;
+  --c-barra-texto: #e9ecef;
+  --c-barra-tenue: #9fb3c8;
+  --c-senal: #1f5fbf;
+  --c-serie-2: #b4540a;
+  --c-normal-fondo: #e3f4e8;
+  --c-normal: #1b6b3a;
+  --c-elevada-fondo: #fff3c4;
+  --c-elevada: #7a5b00;
+  --c-critica-fondo: #fde2e1;
+  --c-critica: #9b1c1c;
+  --c-critica-borde: #f5b5b1;
+  /* Cell bars: 3.75:1 against the panel; the lowest cell uses --c-senal. */
+  --c-celda: #4c85d3;
+  --c-vivo: #4cc38a;
+  /* Status colors that sit on the dark top bar. */
+  --c-reconectando: #f4cd5c;
+  --c-sin-conexion: #ff8a80;
+  --c-barra-error: #ffb4ab;
+  --c-foco-barra: #a3c1ea;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  /* Presentation mode overrides it on the app root (ESCALA_PRESENTACION in escala.ts). */
+  --escala: 1;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--c-fondo);
+  color: var(--c-tinta);
+  font-family: 'Barlow', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.presionable {
+  transition: transform 160ms var(--ease-out);
+}
+
+.presionable:active:not(:disabled):not([data-disabled]) {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .presionable:active:not(:disabled):not([data-disabled]) {
+    transform: none;
+  }
+}

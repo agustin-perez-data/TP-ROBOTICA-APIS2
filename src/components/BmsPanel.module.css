@@ -1,0 +1,132 @@
+.carga {
+  font-size: calc(34px * var(--escala));
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.carga small {
+  font-size: calc(15px * var(--escala));
+  font-weight: 500;
+  color: var(--c-tinta-2);
+}
+
+.barra {
+  height: 8px;
+  background: var(--c-borde-suave);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 4px 0 8px;
+}
+
+.relleno {
+  height: 100%;
+  background: var(--c-senal);
+  border-radius: 4px;
+}
+
+.dato {
+  display: flex;
+  justify-content: space-between;
+  font-size: calc(14px * var(--escala));
+  padding: 2px 0;
+}
+
+.dato span:first-child {
+  color: var(--c-tinta-2);
+}
+
+/* Chart title and its scale: two pieces that wrap whole, never splitting a number. */
+.tituloCeldas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 12px;
+  margin-top: 10px;
+  font-size: calc(13px * var(--escala));
+  color: var(--c-tinta-2);
+}
+
+/* Each list item is a full-height column: the hover target is the whole slot, not only the bar. */
+.celdas {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  height: calc(46px * var(--escala));
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--c-borde);
+}
+
+.celda {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.columna {
+  width: 100%;
+  max-width: 24px;
+  background: var(--c-celda);
+  border-radius: 2px 2px 0 0;
+}
+
+.celda[data-minima='true'] .columna {
+  background: var(--c-senal);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .celda:hover .columna {
+    outline: 1px solid var(--c-tinta);
+    outline-offset: 1px;
+  }
+}
+
+.extremos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 12px;
+  margin-top: 6px;
+  font-size: calc(13px * var(--escala));
+  color: var(--c-tinta-2);
+}
+
+/* Legend key mirrors the mark: a small bar in the cell's color. */
+.extremo {
+  white-space: nowrap;
+}
+
+.extremo::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 11px;
+  margin-right: 5px;
+  border-radius: 1px 1px 0 0;
+  vertical-align: -1px;
+  background: var(--c-celda);
+}
+
+.extremo[data-extremo='minimo']::before {
+  background: var(--c-senal);
+}
+
+.nota {
+  font-size: calc(13px * var(--escala));
+  color: var(--c-tinta-2);
+  margin: 6px 0 0;
+}
+
+.pie {
+  font-size: calc(13px * var(--escala));
+  color: var(--c-tinta-2);
+  margin-top: 2px;
+}
+
+/* Numbers never break across lines. */
+.cifra {
+  white-space: nowrap;
+}

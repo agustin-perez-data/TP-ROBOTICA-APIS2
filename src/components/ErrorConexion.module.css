@@ -1,0 +1,17 @@
+.error {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 14px 0;
+  padding: 10px 14px;
+  border: 1px solid var(--c-critica-borde);
+  border-radius: 6px;
+  background: var(--c-critica-fondo);
+  color: var(--c-critica);
+  font-weight: 600;
+}
+
+.texto {
+  flex: 1;
+  min-width: 0;
+}

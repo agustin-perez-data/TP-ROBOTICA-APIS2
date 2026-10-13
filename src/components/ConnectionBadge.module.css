@@ -1,0 +1,37 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: var(--c-barra-2);
+  color: var(--c-barra-texto);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.punto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--c-apagado);
+}
+
+.badge[data-conexion^='en_vivo'] .punto {
+  background: var(--c-vivo);
+}
+
+.badge[data-conexion='reconectando'] .punto {
+  background: var(--c-reconectando);
+}
+
+.badge[data-conexion='sin_conexion'] .punto {
+  background: var(--c-sin-conexion);
+}
+
+.antiguedad {
+  color: var(--c-barra-tenue);
+  font-weight: 500;
+}

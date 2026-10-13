@@ -1,0 +1,27 @@
+.panel {
+  background: var(--c-panel);
+  border: 1px solid var(--c-borde);
+  border-radius: 6px;
+  padding: 12px 14px;
+  min-width: 0;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 8px;
+}
+
+.titulo {
+  margin: 0;
+  font-size: calc(15px * var(--escala));
+  font-weight: 600;
+  color: var(--c-tinta-2);
+}
+
+.detalle {
+  font-size: 13px;
+  color: var(--c-apagado);
+}

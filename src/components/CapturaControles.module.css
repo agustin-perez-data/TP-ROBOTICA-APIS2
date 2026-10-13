@@ -1,0 +1,8 @@
+/* Mantine's light-gray disabled fill is the brightest thing on the dark bar and reads as active.
+   On the bar a disabled button is a quiet outline instead. */
+.boton:is(:disabled, [data-disabled]) {
+  background: transparent;
+  border: 1px solid var(--c-barra-2);
+  color: var(--c-barra-tenue);
+  cursor: not-allowed;
+}
