@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  margin-bottom: 8px;
+  margin: 0 0 8px;
 }
 
 .valor {
@@ -10,8 +10,8 @@
   color: var(--c-tinta-2);
 }
 
-.valor b {
-  display: block;
+.valor dd {
+  margin: 0;
   font-size: calc(26px * var(--escala));
   font-weight: 700;
   color: var(--c-tinta);

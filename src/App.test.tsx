@@ -43,10 +43,12 @@ describe('App', () => {
     const raiz = screen.getByTestId('raiz');
     await usuario.keyboard('p');
     expect(raiz).toHaveAttribute('data-presentacion', 'true');
+    expect(raiz.style.getPropertyValue('--escala')).toBe('1.45');
     expect(screen.queryByRole('columnheader', { name: 'Velocidad (rad/s)' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Cambiar dirección/ })).not.toBeInTheDocument();
     await usuario.keyboard('{Escape}');
     expect(raiz).toHaveAttribute('data-presentacion', 'false');
+    expect(raiz.style.getPropertyValue('--escala')).toBe('1');
   });
 
   it('sin conexión todavía muestra que busca el robot', () => {
