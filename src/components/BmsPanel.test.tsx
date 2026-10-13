@@ -27,9 +27,8 @@ describe('BmsPanel', () => {
     renderUi(<BmsPanel bateria={completa} />);
     expect(screen.getByText('Mín. 3,695 V · celda 5')).toBeInTheDocument();
     expect(screen.getByText('Máx. 3,724 V · celdas 2 y 8')).toBeInTheDocument();
-    expect(screen.getByText(/^Celdas · escala/)).toHaveTextContent(
-      'Celdas · escala 3,695–3,724 V · diferencia máx. 0,029 V',
-    );
+    expect(screen.getByText('Escala 3,695–3,724 V')).toBeInTheDocument();
+    expect(screen.getByText('Diferencia máx. 0,029 V')).toBeInTheDocument();
     // No per-bar number: 16 of them do not fit and were clipped into wrong values.
     expect(screen.queryByText('3,718')).not.toBeInTheDocument();
   });
@@ -67,6 +66,7 @@ describe('BmsPanel', () => {
     expect(screen.getAllByRole('listitem')).toHaveLength(16);
     expect(screen.getByText('Todas las celdas en 3,700 V')).toBeInTheDocument();
     expect(screen.queryByText(/^Mín\./)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^Escala/)).not.toBeInTheDocument();
   });
 
   it('con 16 celdas distintas nombra todas las que empatan en la mínima', () => {
@@ -74,7 +74,7 @@ describe('BmsPanel', () => {
     renderUi(<BmsPanel bateria={{ ...completa, celdas }} />);
     expect(screen.getByText('Mín. 3,200 V · celdas 1, 6, 11 y 16')).toBeInTheDocument();
     expect(screen.getByText('Máx. 3,680 V · celdas 5, 10 y 15')).toBeInTheDocument();
-    expect(screen.getByText(/^Celdas · escala/)).toHaveTextContent('escala 3,200–3,680 V');
+    expect(screen.getByText('Escala 3,200–3,680 V')).toBeInTheDocument();
   });
 
   it('sin datos muestra —', () => {

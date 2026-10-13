@@ -35,13 +35,24 @@
   color: var(--c-tinta-2);
 }
 
+/* Chart title and its scale: two pieces that wrap whole, never splitting a number. */
+.tituloCeldas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 12px;
+  margin-top: 10px;
+  font-size: calc(13px * var(--escala));
+  color: var(--c-tinta-2);
+}
+
 /* Each list item is a full-height column: the hover target is the whole slot, not only the bar. */
 .celdas {
   display: flex;
   align-items: stretch;
   gap: 4px;
   height: calc(46px * var(--escala));
-  margin: 8px 0 0;
+  margin: 4px 0 0;
   padding: 0;
   list-style: none;
   border-bottom: 1px solid var(--c-borde);
@@ -112,9 +123,7 @@
 .pie {
   font-size: calc(13px * var(--escala));
   color: var(--c-tinta-2);
-  text-align: center;
-  text-wrap: balance;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 /* Numbers never break across lines. */

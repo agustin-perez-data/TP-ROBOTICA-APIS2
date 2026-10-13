@@ -27,6 +27,14 @@ function Celdas({ celdas }: { celdas: number[] }) {
 
   return (
     <>
+      <div className={classes.tituloCeldas}>
+        <span>Celdas</span>
+        {!parejas && (
+          <span className={classes.cifra}>
+            Escala {formatearNumero(min, 3)}–{volts(max)}
+          </span>
+        )}
+      </div>
       {/* One group: after the first tooltip opens, moving to the next bar shows it with no delay. */}
       <Tooltip.Group openDelay={120} closeDelay={60}>
         <ul className={classes.celdas} aria-label="Voltaje por celda">
@@ -65,10 +73,7 @@ function Celdas({ celdas }: { celdas: number[] }) {
               Máx. {volts(max)} · {nombrarCeldas(indicesCon(celdas, max))}
             </span>
           </div>
-          <div className={classes.pie}>
-            Celdas · escala <span className={classes.cifra}>{`${formatearNumero(min, 3)}–${volts(max)}`}</span>{' '}
-            · diferencia máx. <span className={classes.cifra}>{volts(rango)}</span>
-          </div>
+          <div className={classes.pie}>Diferencia máx. {volts(rango)}</div>
         </>
       )}
     </>

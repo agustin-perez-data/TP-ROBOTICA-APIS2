@@ -62,8 +62,9 @@ export function LineChart({
           bodyFont: { ...fuente(FUENTE_TOOLTIP_PX), weight: 600 },
           // Line keys instead of filled boxes; value first, series name after it.
           usePointStyle: true,
+          // The point-style key is a line as long as min(boxWidth, boxHeight).
           boxWidth: 14,
-          boxHeight: 2,
+          boxHeight: 14,
           filter: (item) => item.parsed.y !== null,
           callbacks: {
             title: (items) => `${formatearNumero(items[0]?.parsed.x ?? null, 1)} s`,

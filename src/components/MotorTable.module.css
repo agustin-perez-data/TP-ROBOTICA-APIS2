@@ -21,7 +21,7 @@
 .contenedor {
   flex: 1 1 auto;
   min-height: 0;
-  max-height: min(640px, 70vh);
+  max-height: min(640px, 75vh);
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--c-divisor) transparent;
