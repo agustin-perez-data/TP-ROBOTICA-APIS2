@@ -13,11 +13,18 @@ const completa = {
   disponible: true,
 };
 
+/** The big charge figure sits right before the meter that carries the accessible name. */
+const carga = () =>
+  screen.getByRole('meter', { name: 'Carga de la batería' }).previousElementSibling;
+
 describe('BmsPanel', () => {
   it('muestra carga, corriente, temperatura y celdas', () => {
     renderUi(<BmsPanel bateria={completa} />);
-    expect(screen.getByLabelText('Carga')).toHaveTextContent('92 %');
-    expect(screen.getByRole('meter', { name: 'Carga de la batería' })).toHaveAttribute('aria-valuenow', '92');
+    expect(carga()).toHaveTextContent('92 %');
+    expect(screen.getByRole('meter', { name: 'Carga de la batería' })).toHaveAttribute(
+      'aria-valuenow',
+      '92',
+    );
     expect(screen.getByText('Corriente').nextSibling).toHaveTextContent('1.446 mA');
     expect(screen.getByText('Temperatura').nextSibling).toHaveTextContent('31,6 °C');
     expect(screen.getAllByRole('listitem')).toHaveLength(8);
@@ -37,7 +44,9 @@ describe('BmsPanel', () => {
     renderUi(<BmsPanel bateria={completa} />);
     const minima = screen.getByRole('listitem', { name: 'Celda 5: 3,695 V' });
     expect(minima).toHaveAttribute('data-minima', 'true');
-    expect(screen.getByRole('listitem', { name: 'Celda 1: 3,718 V' })).not.toHaveAttribute('data-minima');
+    expect(screen.getByRole('listitem', { name: 'Celda 1: 3,718 V' })).not.toHaveAttribute(
+      'data-minima',
+    );
   });
 
   it('al pasar el mouse por una barra muestra su voltaje', async () => {
@@ -54,9 +63,11 @@ describe('BmsPanel', () => {
 
   it('en modo simulador explica que solo hay carga', () => {
     renderUi(
-      <BmsPanel bateria={{ soc: 87, corrienteMa: 0, temperatura: 0, celdas: [], disponible: false }} />,
+      <BmsPanel
+        bateria={{ soc: 87, corrienteMa: 0, temperatura: 0, celdas: [], disponible: false }}
+      />,
     );
-    expect(screen.getByLabelText('Carga')).toHaveTextContent('87 %');
+    expect(carga()).toHaveTextContent('87 %');
     expect(screen.getByText('En este modo el backend solo informa la carga.')).toBeInTheDocument();
     expect(screen.queryByText('Corriente')).not.toBeInTheDocument();
   });
@@ -79,6 +90,6 @@ describe('BmsPanel', () => {
 
   it('sin datos muestra —', () => {
     renderUi(<BmsPanel bateria={null} />);
-    expect(screen.getByLabelText('Carga')).toHaveTextContent('—');
+    expect(carga()).toHaveTextContent('—');
   });
 });

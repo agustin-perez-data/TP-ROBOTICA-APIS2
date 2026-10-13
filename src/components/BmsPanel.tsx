@@ -86,8 +86,10 @@ export function BmsPanel({ bateria }: { bateria: Bateria | null }) {
 
   return (
     <Panel titulo="Batería">
-      <div className={classes.carga} aria-label="Carga">
-        {soc === null ? '—' : (
+      <div className={classes.carga}>
+        {soc === null ? (
+          '—'
+        ) : (
           <>
             {formatearNumero(soc, 0)} <small>%</small>
           </>

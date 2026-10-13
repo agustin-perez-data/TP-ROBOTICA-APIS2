@@ -74,5 +74,6 @@ export function descargarCsv(contenido: string, nombre: string): void {
   document.body.append(enlace);
   enlace.click();
   enlace.remove();
-  URL.revokeObjectURL(url);
+  // Deferred: some browsers abort the download if the URL is revoked synchronously.
+  setTimeout(() => URL.revokeObjectURL(url), 0);
 }

@@ -1,10 +1,15 @@
 // @vitest-environment jsdom
-import { act, screen } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { crearInstancias } from '../app/instancias';
 import { infoGo2, telemetriaGo2 } from '../telemetry/__fixtures__/robots';
-import { crearSocketFalso, fetchFalso, json, SocketFalso } from '../telemetry/__tests__/testDoubles';
+import {
+  crearSocketFalso,
+  fetchFalso,
+  json,
+  SocketFalso,
+} from '../telemetry/__tests__/testDoubles';
 import { renderUi } from '../test/render';
 import { CapturaControles } from './CapturaControles';
 
@@ -53,7 +58,9 @@ describe('CapturaControles', () => {
     expect(exportar).toHaveAccessibleDescription('Capturá al menos una muestra para exportar');
     await usuario.tab();
     expect(exportar).toHaveFocus();
-    expect(await screen.findByRole('tooltip')).toHaveTextContent('Capturá al menos una muestra para exportar');
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(
+      'Capturá al menos una muestra para exportar',
+    );
   });
 
   it('capturar suma una muestra y lo confirma', async () => {
@@ -64,6 +71,32 @@ describe('CapturaControles', () => {
     expect(exportar).not.toHaveAttribute('aria-disabled');
     expect(exportar).not.toHaveAccessibleDescription();
     expect(screen.getByRole('status')).toHaveTextContent('Muestra 1 capturada');
+  });
+
+  it('registra como Timestamp el momento en que llegó el dato, no el del clic', async () => {
+    const usuario = userEvent.setup();
+    const ahora = vi.spyOn(Date, 'now').mockReturnValue(1_000_000);
+    const vista = await conDatos();
+    ahora.mockReturnValue(1_001_000);
+    await usuario.click(screen.getByRole('button', { name: 'Capturar muestra' }));
+    expect(vista.instancias.capturas.getCapturas()[0]?.tomadaEn).toBe(1_000_000);
+    ahora.mockRestore();
+  });
+
+  it('no deja capturar con datos desactualizados y explica por qué', async () => {
+    const usuario = userEvent.setup();
+    const ahora = vi.spyOn(Date, 'now').mockReturnValue(1_000_000);
+    await conDatos();
+    expect(screen.getByRole('button', { name: 'Capturar muestra' })).toBeEnabled();
+    ahora.mockReturnValue(1_005_000);
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Capturar muestra' })).toBeDisabled(),
+    );
+    await usuario.hover(screen.getByRole('button', { name: 'Capturar muestra' }).parentElement!);
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(
+      'Los datos están desactualizados; esperá a que vuelva la conexión',
+    );
+    ahora.mockRestore();
   });
 
   it('exportar descarga el CSV y lo confirma', async () => {
